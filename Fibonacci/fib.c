@@ -6,20 +6,21 @@
 
 int fibonacci(int value);
 void fillArray(int array[], int size);
-int binarySearch(int array[], int size, int value);
+void binarySearch(int array[], int size, int value);
 
 int main(int argc, char const *argv[])
 {
 	int fibonacci_elements = 40;
 	int fibo[fibonacci_elements];
-	int i = 0;
 	int value = -1;
+	int index = 0;
+	int iterator = 0;
 
 	fillArray(fibo, fibonacci_elements);
 
-	for (i = 0; i < fibonacci_elements; i++)
+	for (iterator = 0; iterator < fibonacci_elements; iterator++)
 	{
-		printf("%d\n", fibo[i]);
+		printf("%d\n", fibo[iterator]);
 	}
 
 	printf("\n*\nEntre com o valor a ser pesquisado\n*\n");
@@ -29,12 +30,13 @@ int main(int argc, char const *argv[])
 		scanf("%d", &value);
 
 		binarySearch(fibo, fibonacci_elements, value);
+
 	}
 
 	return 0;
 }
 
-int binarySearch(int array[], int size, int value)
+void binarySearch(int array[], int size, int value)
 {
 	int start = 0;
 	int end   = size - 1;
@@ -45,11 +47,19 @@ int binarySearch(int array[], int size, int value)
 	while (!found)
 	{
 		midle = ((start + end) / 2);
-		
+
 		if (array[midle] == value)
 		{
 			index = midle;
 			found = 1;
+			if (index == 1)
+			{
+				printf("*\nA chave 1 se encontra na posição 0 e 1\n*\n");
+			}
+			else
+			{
+				printf("*\nA chave %d se encontra na posição %d\n*\n", value, index);
+			}
 		}
 		else if (array[midle] < value)
 		{
@@ -60,15 +70,13 @@ int binarySearch(int array[], int size, int value)
 			end = midle - 1;
 		}
 
-		if (end > start)
+		if (end < start)
 		{
-			printf("O valor %d nao se encontra no vetor\n", value);
+			printf("*\nO valor %d nao se encontra no vetor\n*\n", value);
 			found = 1;
 			index = -1;
 		}
 	}
-
-	return index;
 }
 
 int fibonacci(int value)
