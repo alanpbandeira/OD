@@ -1,8 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
-
-//#define ARRAY_SIZE( array ) sizeof( array ) / sizeof( array[0] )
 
 int fibonacci(int value);
 void fillArray(int array[], int size);
@@ -18,24 +15,27 @@ int main(int argc, char const *argv[])
 
 	fillArray(fibo, fibonacci_elements);
 
-	for (iterator = 0; iterator < fibonacci_elements; iterator++)
-	{
-		printf("%d\n", fibo[iterator]);
-	}
-
-	printf("\n*\nEntre com o valor a ser pesquisado\n*\n");
+	printf("\n*\nEntre com a chave a ser pesquisada:\n*\n");
 
 	while(value != 0)
 	{
 		scanf("%d", &value);
 
 		binarySearch(fibo, fibonacci_elements, value);
-
 	}
 
 	return 0;
 }
 
+/*
+* Realiza a busca de uma chave dentro de um array
+* atravÈs da tÈcnica de Busca Bin·ria
+* 
+* @param -> name: array[];	type: int
+* @param -> name: size;		type: int
+* @param -> name: value;	type: int
+*    
+*/
 void binarySearch(int array[], int size, int value)
 {
 	int start = 0;
@@ -54,11 +54,11 @@ void binarySearch(int array[], int size, int value)
 			found = 1;
 			if (index == 1)
 			{
-				printf("*\nA chave 1 se encontra na posi√ß√£o 0 e 1\n*\n");
+				printf("*\nA chave 1 se encontra na posicao 0 e 1\n*\n");
 			}
 			else
 			{
-				printf("*\nA chave %d se encontra na posi√ß√£o %d\n*\n", value, index);
+				printf("*\nA chave %d se encontra na posicao %d\n*\n", value, index);
 			}
 		}
 		else if (array[midle] < value)
@@ -79,6 +79,15 @@ void binarySearch(int array[], int size, int value)
 	}
 }
 
+/*
+* Calcula o elemento da serie Fibonacci para
+* a posicao informada
+* 
+* @param -> name: value;	type: int
+*
+* @return -> name: resul;	type: int
+*    
+*/
 int fibonacci(int value)
 {
 	int num = value;
@@ -104,6 +113,14 @@ int fibonacci(int value)
 	return result;
 }
 
+/*
+* Preenche um array com os elementos da
+* serie Fibonacci.
+* 
+* @param -> name: array[];	type: int
+* @param -> name: size;		type: int
+*    
+*/
 void fillArray(int array[], int size)
 {	
 	int i = 0;
@@ -113,3 +130,4 @@ void fillArray(int array[], int size)
 		array[i] = fibonacci(i + 1);
 	}
 }
+
