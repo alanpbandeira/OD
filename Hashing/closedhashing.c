@@ -7,30 +7,85 @@ typedef struct
 {
 	int key;
 	int value;
-	int status = 0;
+	int status;
 } HashTable;
 
 int hashFunction(int value);
 void hashInsert(HashTable table[], int value);
-void hashRemove(HashTable table[], key);
+void hashRemove(HashTable table[], int key);
+void hashPrint(HashTable table[]);
+void fillArray(int array[], int array_size);
+void showMenu();
+void emptyTable(HashTable table[], int table_size);
 
 int main(int argc, char const *argv[])
 {
-	int array[50];
+	int array_size = 50;
+	int table_size = 100;
+	int array[array_size];
 	int count = 0;
-	HashTable table[100];
-	time_t t;
+	int menu_input = -1;
+	int key_remove = -1;
+	int x = 1;
 
-	srand((unsigned) time(&t));
+	HashTable table[table_size];
 
-	for (count = 0; count < 50; count++)
+	emptyTable(table, table_size);
+	system("clear");
+	printf("Uma tabela vazia foi criada\n\n");
+
+	while(menu_input != 0)
 	{
-		array[count] = rand();
+		system("clear");
+		showMenu();
+		scanf("%d", &menu_input);
+		
+		switch(menu_input)
+		{
+			case 1:
+				fillArray(array, array_size);
+				break;
+			case 2:
+				x = 1;
+				system("clear");
+				for (count = 0; count < array_size; count ++)
+				{
+					printf("%d\n", array[count]);
+				}
+				printf("\n\nEntre com 0 para retornar ao menu:\n");
+				while(x != 0)
+				{
+					scanf("%d", &x);
+				}
+				break;
+			case 3:
+				for (count = 0; count < 50; count++)
+				{
+					hashInsert(table, array[count]);
+				}
+				break;
+			case 4:
+				x = 1;
+				system("clear");
+				hashPrint(table);
+				printf("\n\nEntre com 0 para retornar ao menu:\n");
+				while(x != 0)
+				{
+					scanf("%d", &x);
+				}
+				break;
+			case 5:
+				printf("Entre com a chave que deseja remover\n");
+				scanf("%d", &key_remove);
+				hashRemove(table, key_remove);
+				break;
+			default:
+				break;
+		}		
 	}
 
 	return 0;
 }
-
 
 int hashFunction(int value)
 {
@@ -38,72 +93,160 @@ int hashFunction(int value)
 
 	result = value % 99;
 
-	return result
+	return result;
 }
 
 void hashInsert(HashTable table[], int value)
 {
-	int elemet = value;
+	int element = value;
 	
-	if (elemet == 0)
+	if (element == 0)
 	{
-		elemet++;
+		element++;
 	}
 
 	int key = hashFunction(element);
-	int alternate_key = key;
+	int current_key = key;
 
-	while (table[alternate_key].status != 0)
+	while (table[current_key].status != 0)
 	{
-		alternate_key++;
+		current_key++;
 
-		if (alternate_key == 99)
+		if (current_key == 99)
 		{
-			alternate_key = 0;
+			current_key = 0;
 		}
 	}
 
-	table[alternate_key].key   = key;
-	table[alternate_key].value = element;
+	table[current_key].key   = key;
+	table[current_key].value = element;
 
-	if (alternate_key != key)
+	if (current_key != key)
 	{
-		table[alternate_key].status = 100;
+		table[current_key].status = 100;
 	}
 	else
 	{
-		table[alternate_key].status = 1;
+		table[current_key].status = 1;
 	}
 }
 
 void hashRemove(HashTable table[], int key)
 {
-	int alternate_key = key;
-
-	if (alternate_key)
-
-	while(alternate_key < 100)
+	if (key < 0)
 	{
-		if (alternate_key == table[alternate_key + 1].key)
+		printf("Chave invalida\n");
+		return;
+	}
+
+	int current_key = key;
+	int count = current_key + 1;
+
+	table[current_key].status = 0;
+	table[current_key].value = 0;
+
+	while (count < 100)
+	{		
+		if (table[count].status == 100)
 		{
-			table[alternate_key].key = table[alternate_key + 1].key];
-			table[alternate_key].value = table[alternate_key + 1].value];
-			table[alternate_key].status = 1;
-			alternate_key++;
+			if (table[count].key >= current_key)
+			{
+				table[current_key].key = table[count].key;
+				table[current_key].value = table[count].value;
+				if (current_key == table[current_key].key)
+				{
+					table[current_key].status = 1;
+				}
+				else
+				{
+					table[current_key].status = 100;
+				}
+
+				current_key = count;
+				count ++;
+			}
+			else
+			{
+				count ++;
+			}
 		}
 		else
 		{
-			table[alternate_key].key = table[alternate_key + 1].key];
-			table[alternate_key].value = table[alternate_key + 1].value];
-			alternate_key++;	
+			count ++;
 		}
 	}
 }
 
+void hashPrint(HashTable table[])
+{
+	int count = 0;
 
+	printf("Tabela\n\n");
+	printf("----------------------------\n");
+	
+	for (count; count < 100; count++)
+	{
+		if (table[count].status == 0)
+		{
+			printf("| %d |    |            | %d |\n", count, table[count].status);
+			printf("----------------------------\n");
+		}
+		else if (table[count].status == 1)
+		{
+			printf("| %d | %d | %d | %d |\n", count,
+											  table[count].key, 
+										 	  table[count].value, 
+										 	  table[count].status);
+			printf("----------------------------\n");		
+		}
+		else if (table[count].status == 100)
+		{
+			printf("| %d | %d | %d | * |\n", count, 
+											 table[count].key, 
+											 table[count].value);
+			printf("----------------------------\n");
+		}
+	}
 
+	printf("\n");
+}
 
+void fillArray(int array[], int array_size)
+{
+	time_t t;
+	int count = 0;
 
+	srand((unsigned) time(&t));
+
+	for (count; count < array_size; count++)
+	{
+		array[count] = rand();
+	}
+}
+
+void showMenu()
+{
+	printf("Menu:\n");
+	printf("\t Entre com a opcao desejada:\n");	
+	printf("\t1. Gerar lista de numeros aleatórios.\n");	
+	printf("\t2. Exibir lista.\n");
+	printf("\t3. Inserir valores da lista na tabela.\n");	
+	printf("\t4. Exibir tabela.\n\t5. Remover valor da tabela.\n");	
+	printf("Entre com o valor 0 para encerrar\n\n");
+}
+
+void emptyTable(HashTable table[], int table_size)
+{
+	int count = 0;
+
+	for (count; count < table_size; count++)
+	{
+		table[count].key = 0;
+		table[count].value = 0;
+		table[count].status = 0;
+	}
+	
+}
 
 
 
