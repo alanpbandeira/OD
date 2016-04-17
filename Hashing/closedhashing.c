@@ -31,11 +31,13 @@ int main(int argc, char const *argv[])
 	HashTable table[table_size];
 
 	emptyTable(table, table_size);
+	//system("cls"); //unconment for windows
 	system("clear");
 	printf("Uma tabela vazia foi criada\n\n");
 
 	while(menu_input != 0)
 	{
+		//system("cls"); //unconment for windows
 		system("clear");
 		showMenu();
 		scanf("%d", &menu_input);
@@ -44,9 +46,11 @@ int main(int argc, char const *argv[])
 		{
 			case 1:
 				fillArray(array, array_size);
+				
 				break;
 			case 2:
 				x = 1;
+				//system("cls"); //unconment for windows
 				system("clear");
 				for (count = 0; count < array_size; count ++)
 				{
@@ -57,27 +61,34 @@ int main(int argc, char const *argv[])
 				{
 					scanf("%d", &x);
 				}
+				
 				break;
 			case 3:
 				for (count = 0; count < 50; count++)
 				{
 					hashInsert(table, array[count]);
 				}
+				
 				break;
 			case 4:
 				x = 1;
+				//system("cls"); //unconment for windows
 				system("clear");
+				
 				hashPrint(table);
 				printf("\n\nEntre com 0 para retornar ao menu:\n");
+				
 				while(x != 0)
 				{
 					scanf("%d", &x);
 				}
+				
 				break;
 			case 5:
 				printf("Entre com a chave que deseja remover\n");
 				scanf("%d", &key_remove);
 				hashRemove(table, key_remove);
+				
 				break;
 			default:
 				break;
@@ -149,7 +160,7 @@ void hashRemove(HashTable table[], int key)
 	{		
 		if (table[count].status == 100)
 		{
-			if (table[count].key >= current_key)
+			if (current_key >= table[count].key)
 			{
 				table[current_key].key = table[count].key;
 				table[current_key].value = table[count].value;
@@ -161,6 +172,9 @@ void hashRemove(HashTable table[], int key)
 				{
 					table[current_key].status = 100;
 				}
+				
+				table[count].status = 0;
+				table[count].value = 0;
 
 				current_key = count;
 				count ++;
@@ -228,7 +242,7 @@ void showMenu()
 {
 	printf("Menu:\n");
 	printf("\t Entre com a opcao desejada:\n");	
-	printf("\t1. Gerar lista de numeros aleatórios.\n");	
+	printf("\t1. Gerar lista de numeros aleatorios.\n");	
 	printf("\t2. Exibir lista.\n");
 	printf("\t3. Inserir valores da lista na tabela.\n");	
 	printf("\t4. Exibir tabela.\n\t5. Remover valor da tabela.\n");	
