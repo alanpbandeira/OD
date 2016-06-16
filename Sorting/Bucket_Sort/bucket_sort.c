@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define ARRAY_SIZE 200
-#define NUM_BUCKETS 200
-#define BUCKET_SIZE 100
+#define ARRAY_SIZE 24
+#define NUM_BUCKETS 5
+#define BUCKET_SIZE 10
 
 typedef struct
 {
@@ -12,7 +12,7 @@ typedef struct
 	int bucket[BUCKET_SIZE];
 } Bucket;
 
-// Funtion Prototypes
+// Function Prototypes
 void fillArray(int array[], int array_size);
 void showArray(int array[], int array_size);
 void persistArray(int array[], int array_size);
@@ -25,9 +25,12 @@ int main(int argc, char const *argv[])
 	int array[ARRAY_SIZE];
 
 	fillArray(array, ARRAY_SIZE);
+	printf("\n|------------------- Array a ser ordenado -------------------|\n");
 	showArray(array, ARRAY_SIZE);
 	bucketSort(array, ARRAY_SIZE);
-	persistArray(array, ARRAY_SIZE);
+	printf("\n|------------------- Array após ordenação -------------------|\n");
+	showArray(array, ARRAY_SIZE);
+	//persistArray(array, ARRAY_SIZE);
 
 	return 0;
 }
@@ -40,16 +43,25 @@ void bucketSort(int array[], int array_size)
 	int i, j, index;
 	int current_position = 0;
 	
-	for (i = 0; i < array_size; i++)
+	for (i = 0; i < NUM_BUCKETS; i++)
 	{
 		b[i].topo = 0;
 	}
 
 	for (i = 0; i < array_size; i++)
 	{
-		index = (int)((float)array_size * ((float)array[i] / 100.0));
+		//index = (int)((float)array[i] / 1000.0);
+		index = (int)((float)NUM_BUCKETS * ((float)array[i] / 1000.0));
 		b[index].bucket[b[index].topo] = array[i];
 		b[index].topo++;
+	}
+
+	printf("\n|------------------- Buckets desordenados ------------------|\n");
+
+	for (i = 0; i < NUM_BUCKETS; i++)
+	{
+		printf("\n|Bucket %d|", i);
+		showArray(b[i].bucket, b[i].topo);
 	}
 
 	for (i = 0; i < NUM_BUCKETS; i++)
@@ -58,6 +70,14 @@ void bucketSort(int array[], int array_size)
 		{
 			insertionSort(b[i].bucket, b[i].topo);
 		}
+	}
+
+	printf("\n|-------------------- Buckets ordenados --------------------|\n");
+
+	for (i = 0; i < NUM_BUCKETS; i++)
+	{
+		printf("\n|Bucket %d|", i);
+		showArray(b[i].bucket, b[i].topo);
 	}
 
 	for (i = 0; i < NUM_BUCKETS; i++)
@@ -119,12 +139,21 @@ void persistArray(int array[], int array_size)
 {
 	FILE *fp;
 	fp = fopen("result.txt", "w");
+	int line = 10;
 
 	int count;
-	
 	for (count = 0; count < array_size; count++)
 	{
-		fprintf(fp, "%d\n", array[count]);
+		if (count % line == 0 && count != 0)
+			{
+				fprintf(fp,"\n");
+				fprintf(fp, "%i\t", array[count]);
+			}
+			else
+			{
+				fprintf(fp, "%d\t", array[count]);	
+			}
+		//fprintf(fp, "%d\n", array[count]);
 	}
 
 	fclose(fp);
@@ -144,7 +173,7 @@ void fillArray(int array[], int array_size)
 
 	for (count = 0; count < array_size; count++)
 	{
-		array[count] = rand()%100;
+		array[count] = rand()%1000;
 	}
 }
 
@@ -153,10 +182,19 @@ void fillArray(int array[], int array_size)
 void showArray(int array[], int array_size)
 {
 	int count;
-	printf("\n");
+	int line = 10;
+	//printf("\n");
 	for (count = 0; count < array_size; ++count)
 	{
-		printf("%i ", array[count]);
+		if (count % line == 0 && count != 0)
+		{
+			printf("\n");
+			printf("%i\t", array[count]);
+		}
+		else
+		{
+			printf("%i\t", array[count]);	
+		}
 	}
 	printf("\n");
 }
